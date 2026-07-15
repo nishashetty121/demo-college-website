@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Meet the expert faculty and dedicated academic leadership of Pinecrest Academy. Explore our teacher directories.">
+    <meta name="keywords" content="Pinecrest Academy faculty, teacher directory, school staff, academic leadership">
+    <title>Faculty & Staff | Pinecrest Academy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header id="site-header">
+        <div class="container">
+            <a href="index.html" class="logo" id="header-logo">
+                <div class="logo-icon">P</div>
+                Pinecrest <span>Academy</span>
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label" id="menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <nav id="main-navigation">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link" id="nav-home">Home</a></li>
+                    <li><a href="about.html" class="nav-link" id="nav-about">About Us</a></li>
+                    <li><a href="curriculum-admissions.html" class="nav-link" id="nav-academics">Curriculum & Admissions</a></li>
+                    <li><a href="faculty.html" class="nav-link active" id="nav-faculty">Faculty</a></li>
+                    <li><a href="gallery.html" class="nav-link" id="nav-gallery">Gallery</a></li>
+                    <li><a href="contact.html" class="nav-link" id="nav-contact">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="faculty-section" id="faculty-directory">
+            <div class="container">
+                <div class="text-center">
+                    <h1 class="section-title">Faculty & Staff Directory</h1>
+                    <p class="section-subtitle">Connect with our team of passionate educators, mentors, and scholars committed to academic brilliance.</p>
+                </div>
+
+                <!-- Grid container for dynamic loading -->
+                <div id="faculty-grid">
+                    <!-- Placeholder Shimmer Card 1 -->
+                    <div class="shimmer-card" id="shimmer-1">
+                        <div class="shimmer-img"></div>
+                        <div class="shimmer-line title"></div>
+                        <div class="shimmer-line sub"></div>
+                        <div class="shimmer-line body-1"></div>
+                        <div class="shimmer-line body-2"></div>
+                    </div>
+                    <!-- Placeholder Shimmer Card 2 -->
+                    <div class="shimmer-card" id="shimmer-2">
+                        <div class="shimmer-img"></div>
+                        <div class="shimmer-line title"></div>
+                        <div class="shimmer-line sub"></div>
+                        <div class="shimmer-line body-1"></div>
+                        <div class="shimmer-line body-2"></div>
+                    </div>
+                    <!-- Placeholder Shimmer Card 3 -->
+                    <div class="shimmer-card" id="shimmer-3">
+                        <div class="shimmer-img"></div>
+                        <div class="shimmer-line title"></div>
+                        <div class="shimmer-line sub"></div>
+                        <div class="shimmer-line body-1"></div>
+                        <div class="shimmer-line body-2"></div>
+                    </div>
+                    <!-- Placeholder Shimmer Card 4 -->
+                    <div class="shimmer-card" id="shimmer-4">
+                        <div class="shimmer-img"></div>
+                        <div class="shimmer-line title"></div>
+                        <div class="shimmer-line sub"></div>
+                        <div class="shimmer-line body-1"></div>
+                        <div class="shimmer-line body-2"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="logo" style="margin-bottom: 20px;" id="footer-logo">
+                        <div class="logo-icon">P</div>
+                        Pinecrest <span>Academy</span>
+                    </a>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Inspiring excellence, cultivating character, and empowering global citizens for a lifetime of learning and leadership.</p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html" class="footer-link" id="footer-link-home">Home</a></li>
+                        <li><a href="about.html" class="footer-link" id="footer-link-about">About Us</a></li>
+                        <li><a href="curriculum-admissions.html" class="footer-link" id="footer-link-academics">Curriculum & Admissions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="faculty.html" class="footer-link" id="footer-link-faculty">Faculty Directory</a></li>
+                        <li><a href="gallery.html" class="footer-link" id="footer-link-gallery">Photo Gallery</a></li>
+                        <li><a href="contact.html" class="footer-link" id="footer-link-contact">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Contact Us</h4>
+                    <div class="footer-info">
+                        <p><span>Address:</span> 123 Learning Lane, Education City, ED 10234</p>
+                        <p><span>Phone:</span> (555) 123-4567</p>
+                        <p><span>Email:</span> info@pinecrestacademy.edu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pinecrest Academy. All rights reserved.</p>
+                <p>Designed with excellence for next-generation learners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script to simulate dynamic loading of faculty members -->
+    <script id="faculty-loader-script">
+        document.addEventListener("DOMContentLoaded", () => {
+            const facultyData = [
+                {
+                    name: "Dr. Evelyn Vance",
+                    role: "Principal & Director of Studies",
+                    bio: "Dr. Vance holds a Ph.D. in Educational Leadership from Oxford. She has over 20 years of experience in school administration and educational policy planning.",
+                    email: "e.vance@pinecrestacademy.edu",
+                    initial: "EV"
+                },
+                {
+                    name: "Marcus Sterling",
+                    role: "Head of Science & STEM Coordinator",
+                    bio: "With a Master's in Physics and research work at CERN, Marcus coordinates AP Physics, Robotics programming, and the annual regional STEM Olympiads.",
+                    email: "m.sterling@pinecrestacademy.edu",
+                    initial: "MS"
+                },
+                {
+                    name: "Sarah Jenkins",
+                    role: "Head of English & Humanities",
+                    bio: "Sarah is passionate about Shakespeare and modern prose. She mentors the creative writing clubs and leads the High School Literature curriculum.",
+                    email: "s.jenkins@pinecrestacademy.edu",
+                    initial: "SJ"
+                },
+                {
+                    name: "David Cho",
+                    role: "Mathematics Director",
+                    bio: "An alumnus of MIT, David makes calculus and algebraic topologies engaging and approachable. He is the lead advisor for the Math Olympiad team.",
+                    email: "d.cho@pinecrestacademy.edu",
+                    initial: "DC"
+                },
+                {
+                    name: "Elena Rostova",
+                    role: "Visual Arts Instructor",
+                    bio: "Elena is a professional fine artist whose gallery exhibitions span international venues. She guides students in painting, sculpture, and design portfolios.",
+                    email: "e.rostova@pinecrestacademy.edu",
+                    initial: "ER"
+                },
+                {
+                    name: "Robert Vance",
+                    role: "Athletics Director",
+                    bio: "Former professional decathlete, Coach Robert supervises our comprehensive physical training curriculums, football programs, and track events.",
+                    email: "r.vance@pinecrestacademy.edu",
+                    initial: "RV"
+                }
+            ];
+
+            const facultyGrid = document.getElementById("faculty-grid");
+
+            // Simulate server response delay of 1.2 seconds
+            setTimeout(() => {
+                // Clear shimmers
+                facultyGrid.innerHTML = "";
+
+                // Populate with actual data
+                facultyData.forEach((teacher, index) => {
+                    const card = document.createElement("div");
+                    card.className = "teacher-card";
+                    card.id = `teacher-card-${index + 1}`;
+                    card.style.opacity = 0;
+                    card.style.transform = "translateY(20px)";
+                    card.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+
+                    card.innerHTML = `
+                        <div class="teacher-image-placeholder">
+                            <div style="z-index: 1;">${teacher.initial}</div>
+                        </div>
+                        <div class="teacher-info">
+                            <h3 class="teacher-name">${teacher.name}</h3>
+                            <div class="teacher-role">${teacher.role}</div>
+                            <p class="teacher-bio">${teacher.bio}</p>
+                            <div class="teacher-email">
+                                <span>&#9993;</span> ${teacher.email}
+                            </div>
+                        </div>
+                    `;
+
+                    facultyGrid.appendChild(card);
+
+                    // Staggered fade-in effect
+                    setTimeout(() => {
+                        card.style.opacity = 1;
+                        card.style.transform = "translateY(0)";
+                    }, index * 100);
+                });
+            }, 1200);
+        });
+    </script>
+</body>
+</html>

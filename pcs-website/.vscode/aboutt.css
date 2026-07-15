@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+/* About Page Styles */
+.about-hero {
+    margin-bottom: 40px;
+}
+.section-title{
+    color:darkslateblue;
+}
+.intro-text {
+    color:rgb(145, 164, 164) ;
+    font-size: large;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.about-intro-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.principal-card {
+    background: linear-gradient(135deg, rgba(51, 88, 174, 0.7), rgba(5, 28, 66, 0.5));
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-glow);
+}
+
+.principal-meta {
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color);
+    padding-top:10px;
+}
+
+.principal-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color:aqua
+}
+
+.principal-title {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.mission-vision-grid {
+    margin-top: 40px;
+}
+
+/* Modern Grid Timeline (Option 3) */
+.timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+    .timeline-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.timeline-card {
+    background: rgba(88, 28, 135, 0.15); /* Deep translucent violet */
+    border: 1px solid rgba(168, 85, 247, 0.2); /* Soft violet border */
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    position: relative;
+    transition: var(--transition-normal);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition-normal);
+    background: linear-gradient(to right, #c084fc, #f472b6);
+}
+
+.timeline-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-glow);
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.timeline-card:hover::before {
+    transform: scaleX(1);
+}
+
+.timeline-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.timeline-card-year {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #c084fc;
+}
+
+.timeline-card-number {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-card-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.timeline-card-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+/* Custom Styled Mission & Vision Cards */
+.mission-vision-grid {
+    margin-top: 40px;
+}
+
+/* Glassmorphism frame specifically for Mission & Vision */
+.mission-vision-grid .card {
+    background: rgba(88, 28, 135, 0.12); /* Translucent dark purple */
+    border: 1px solid rgba(168, 85, 247, 0.25); /* Violet border */
+    border-radius: var(--radius-lg); /* Larger rounded corners */
+    padding: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    transition: var(--transition-normal);
+}
+
+/* Gradient strip animation at the top */
+.mission-vision-grid .card::before {
+    background: linear-gradient(to right, #c084fc, #f472b6); /* Violet-pink strip */
+}
+
+/* Hover elevation & glow */
+.mission-vision-grid .card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
+    background: rgba(88, 28, 135, 0.2);
+}
+
+/* Glowing Circular Icon Container */
+.mission-vision-grid .card-icon {
+    margin-bottom: 24px;
+    display: inline-block;
+}
+
+.mission-vision-grid .icon-badge {
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%; /* Perfect Circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+    transition: var(--transition-normal);
+}
+
+/* Icon micro-animation on hover */
+.mission-vision-grid .card:hover .icon-badge {
+    transform: scale(1.12) rotate(8deg);
+    background: rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+}
