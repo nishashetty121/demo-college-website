@@ -15,6 +15,7 @@
             padding: 24px;
             background: rgba(15, 23, 42, 0.4);
             border: 1px dashed var(--accent);
+            border-top: 2px solid var(--accent);
             border-radius: var(--radius-md);
             text-align: center;
             transition: var(--transition-normal);
@@ -75,6 +76,7 @@
             opacity: 1;
             transform: translateY(0);
         }
+
         /* Gallery Styles */
         #gallery-container {
             display: grid;
@@ -89,12 +91,12 @@
             padding: 80px 40px;
             border: 2px dashed var(--border-color);
             border-radius: var(--radius-lg);
-            background:  rgba(139, 92, 246, 0.08;
+            background: rgba(139, 92, 246, 0.08);
         }
 
         .gallery-empty-icon {
             font-size: 3.5rem;
-            color: rgba(119, 129, 134, 0.2);
+            color: rgba(139, 92, 246, 0.4);
             margin-bottom: 16px;
         }
 
@@ -109,7 +111,34 @@
             max-width: 500px;
             margin: 0 auto;
         }
-        @media (max-width: 900px) { #gallery-container { grid-template-columns: 1fr; } }
+
+        .section-subtitle {
+            text-align: center;
+        }
+
+        /* Gradient heading */
+        #gallery-section .section-title {
+            background: linear-gradient(to right, var(--accent), #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Pulsing camera icon */
+        .upload-icon {
+            animation: pulse 2s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50%       { transform: scale(1.15); }
+        }
+
+        @media (max-width: 900px) {
+            #gallery-container {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -146,15 +175,14 @@
             <div class="container">
                 <div class="text-center">
                     <h1 class="section-title">Photo Gallery</h1>
-                    <p class="section-subtitle"><center>Catch a glimpse of daily student life, athletics carnivals, science labs, and graduations.</center></p>
                 </div>
 
-                <!-- Mock upload section to show dynamic capabilities -->
+                <!-- Upload section -->
                 <div class="gallery-upload-zone" id="upload-zone">
-                    <div style="font-size: 1.5rem; color: var(--accent);">&#128247;</div>
+                    <div class="upload-icon" style="font-size: 1.5rem; color: var(--accent);">&#128247;</div>
                     <h3 style="font-size: 1.1rem; margin-top: 8px;">Dynamic Image Uploader Demo</h3>
                     <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Upload custom images locally to populate the empty gallery container in real-time.</p>
-                    <input type="file" id="gallery-file-input"  add aria-label="Upload photos to the gallery" accept="image/*" style="display: none;">
+                    <input type="file" id="gallery-file-input" aria-label="Upload photos to the gallery" accept="image/*" style="display: none;">
                     <label for="gallery-file-input" class="upload-input-label" id="file-input-btn">Choose Image</label>
                 </div>
 
@@ -228,17 +256,17 @@
                 const reader = new FileReader();
 
                 reader.onload = (e) => {
-                    // Hide empty state if it's there
                     if (emptyState) {
                         emptyState.style.display = "none";
                     }
 
-                    // Create item container
                     const item = document.createElement("div");
                     item.className = "gallery-item";
 
-                    // Simple caption from filename without extension
-                    const caption = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+                    const index = file.name.lastIndexOf(".");
+                    const caption = index !== -1
+                        ? file.name.substring(0, index)
+                        : file.name;
 
                     item.innerHTML = `
                         <img src="${e.target.result}" alt="${caption}">
@@ -249,8 +277,6 @@
                 };
 
                 reader.readAsDataURL(file);
-
-                // Reset file input so same file can be uploaded again if deleted/refreshed
                 fileInput.value = "";
             });
         });
