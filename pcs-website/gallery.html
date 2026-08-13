@@ -8,133 +8,145 @@
     <title>Photo Gallery | Pinecrest Academy</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ── Page heading ── */
-        .gallery-page-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .gallery-page-header .section-subtitle {
-            text-align: center;
-            margin: 0 auto 0;
-        }
+        .gallery-page-header { text-align: center; margin-bottom: 40px; }
+        .gallery-page-header .section-subtitle { text-align: center; margin: 0 auto 0; }
 
-        /* ── Filter Tabs ── */
         .gallery-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 48px;
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 40px;
         }
         .filter-btn {
-            padding: 8px 20px;
-            border-radius: 999px;
-            border: 1px solid var(--border-color);
-            background: transparent;
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition-fast);
+            padding: 8px 20px; border-radius: 999px; border: 1px solid var(--border-color);
+            background: transparent; color: var(--text-muted); font-size: 0.88rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition-fast);
         }
-        .filter-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-        .filter-btn.active {
-            background: var(--accent);
-            color: var(--bg-main);
-            border-color: var(--accent);
-        }
+        .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .filter-btn.active { background: var(--accent); color: var(--bg-main); border-color: var(--accent); }
 
-        /* ── Event Section ── */
-        .gallery-event {
-            margin-bottom: 64px;
+        /* ── Slider ── */
+        .slider {
+            position: relative;
+            max-width: 940px;
+            margin: 0 auto 20px;
         }
-        .gallery-event[data-category] {
-            transition: var(--transition-normal);
-        }
-
-        /* Photo grid: 1-4 photos auto-fit */
-        .event-photos {
-            display: grid;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .event-photos.count-1 { grid-template-columns: 1fr; }
-        .event-photos.count-2 { grid-template-columns: repeat(2, 1fr); }
-        .event-photos.count-3 { grid-template-columns: repeat(3, 1fr); }
-        .event-photos.count-4 { grid-template-columns: repeat(2, 1fr); }
-
-        .event-photo {
-            border-radius: var(--radius-md);
+        .slider-viewport {
             overflow: hidden;
-            aspect-ratio: 4 / 3;
+            border-radius: var(--radius-md, 10px);
             border: 1px solid var(--border-color);
             background: rgba(14, 24, 49, 0.5);
-            transition: var(--transition-normal);
         }
-        .event-photo:hover {
-            transform: scale(1.02);
-            border-color: var(--accent);
-            box-shadow: var(--shadow-glow);
+        .slider-track {
+            display: flex;
+            transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
         }
-        .event-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .slide {
+            flex: 0 0 100%;
+            position: relative;
+            height: 480px;
+            background: #0a0f1e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .slide img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             display: block;
         }
-
-        /* count-1: make the single photo wider but not full bleed */
-        .event-photos.count-1 .event-photo {
-            max-height: 420px;
+        @media (max-width: 700px) {
+            .slide { height: 320px; }
+        }
+        .slide-caption {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            padding: 28px 28px 20px;
+            background: linear-gradient(to top, rgba(5,10,28,0.92) 10%, transparent 100%);
+        }
+        .slide-caption .cap-tag {
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.09em; color: var(--accent); margin-bottom: 6px;
+        }
+        .slide-caption .cap-title {
+            font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 6px;
+        }
+        .slide-caption .cap-desc {
+            font-size: 0.86rem; color: rgba(255,255,255,0.65); line-height: 1.6; max-width: 640px;
+        }
+        @media (max-width: 700px) {
+            .slide-caption { padding: 18px 18px 14px; }
+            .slide-caption .cap-desc { display: none; }
         }
 
-        .event-info {
-            padding: 4px 0 0;
+        /* Arrows */
+        .slide-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10, 16, 36, 0.65);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: #fff;
+            font-size: 1.4rem;
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.18s, border-color 0.18s;
+            z-index: 5;
         }
-        .event-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-        .event-desc {
-            color: var(--text-muted);
-            font-size: 0.93rem;
-            line-height: 1.7;
-            max-width: 780px;
+        .slide-arrow:hover { background: var(--accent); border-color: var(--accent); }
+        .slide-arrow.prev { left: 14px; }
+        .slide-arrow.next { right: 14px; }
+
+        /* Counter */
+        .slide-counter {
+            position: absolute;
+            top: 16px; right: 18px;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.8);
+            background: rgba(10, 16, 36, 0.65);
+            padding: 4px 10px;
+            border-radius: 999px;
+            letter-spacing: 0.04em;
+            z-index: 5;
         }
 
-        /* Divider between events */
-        .gallery-event + .gallery-event {
-            border-top: 1px solid var(--border-color);
-            padding-top: 64px;
+        /* Dots */
+        .slide-dots {
+            display: flex; justify-content: center; gap: 8px; margin-top: 18px;
         }
+        .slide-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--border-color);
+            border: none;
+            cursor: pointer;
+            transition: background 0.18s, width 0.18s;
+            padding: 0;
+        }
+        .slide-dot.active { background: var(--accent); width: 22px; border-radius: 4px; }
 
-        /* ── Mobile ── */
-        @media (max-width: 768px) {
-            .event-photos.count-3,
-            .event-photos.count-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .event-photos.count-2 {
-                grid-template-columns: 1fr;
-            }
+        /* Thumbnail rail below main slider */
+        .slide-thumbs {
+            display: flex; gap: 8px; overflow-x: auto; max-width: 940px;
+            margin: 18px auto 64px; padding-bottom: 4px;
+            scrollbar-width: thin; scrollbar-color: var(--accent) transparent;
         }
-        @media (max-width: 480px) {
-            .event-photos.count-2,
-            .event-photos.count-3,
-            .event-photos.count-4 {
-                grid-template-columns: 1fr;
-            }
+        .slide-thumbs::-webkit-scrollbar { height: 4px; }
+        .slide-thumbs::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+        .slide-thumb {
+            flex-shrink: 0; width: 84px; height: 60px; border-radius: 6px; overflow: hidden;
+            border: 2px solid transparent; cursor: pointer; opacity: 0.5;
+            transition: opacity 0.18s, border-color 0.18s;
         }
+        .slide-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .slide-thumb.active { opacity: 1; border-color: var(--accent); }
+        .slide-thumb:hover { opacity: 0.85; }
     </style>
 </head>
 <body>
 
-    <!-- ── Header & Navigation (unchanged) ── -->
     <header id="site-header">
         <div class="container">
             <a href="index.html" class="logo" id="header-logo">
@@ -143,15 +155,13 @@
             </a>
             <input type="checkbox" id="nav-toggle" class="nav-toggle">
             <label for="nav-toggle" class="nav-toggle-label" id="menu-btn">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </label>
             <nav id="main-navigation">
                 <ul class="nav-list">
                     <li><a href="index.html" class="nav-link" id="nav-home">Home</a></li>
                     <li><a href="about.html" class="nav-link" id="nav-about">About Us</a></li>
-                    <li><a href="curriculum-admissions.html" class="nav-link" id="nav-academics">Curriculum & Admissions</a></li>
+                    <li><a href="curriculum-admissions.html" class="nav-link" id="nav-academics">Curriculum &amp; Admissions</a></li>
                     <li><a href="faculty.html" class="nav-link" id="nav-faculty">Faculty</a></li>
                     <li><a href="gallery.html" class="nav-link active" id="nav-gallery">Gallery</a></li>
                     <li><a href="contact.html" class="nav-link" id="nav-contact">Contact Us</a></li>
@@ -160,18 +170,15 @@
         </div>
     </header>
 
-    <!-- ── Main Content ── -->
     <main>
         <section id="gallery-section">
             <div class="container">
 
-                <!-- Page Heading -->
                 <div class="gallery-page-header text-center">
                     <h1 class="section-title">Photo Gallery</h1>
                     <p class="section-subtitle">A window into academic life, practical learning sessions, sports, and cultural achievements at Pinecrest Academy.</p>
                 </div>
 
-                <!-- Filter Tabs -->
                 <div class="gallery-filters" id="gallery-filters">
                     <button class="filter-btn active" data-filter="all">All Photos</button>
                     <button class="filter-btn" data-filter="events">Seminars &amp; Events</button>
@@ -180,115 +187,24 @@
                     <button class="filter-btn" data-filter="achievements">Honors &amp; Achievements</button>
                 </div>
 
-                <!-- ── Event Sections ── -->
-
-                <!-- Event 1 -->
-                <div class="gallery-event" data-category="events">
-                    <div class="event-photos count-2">
-                        <div class="event-photo">
-                            <img src="photos demo/images.jfif" alt="Orientation Day 1">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/DDR-Orientation-Day-2023-8.jpg" alt="Orientation Day 2">
-                        </div>
+                <!-- Slider -->
+                <div class="slider" id="slider" tabindex="0">
+                    <div class="slider-viewport">
+                        <div class="slider-track" id="slider-track"></div>
+                        <div class="slide-counter" id="slide-counter"></div>
+                        <button class="slide-arrow prev" id="slide-prev" aria-label="Previous photo">&#8592;</button>
+                        <button class="slide-arrow next" id="slide-next" aria-label="Next photo">&#8594;</button>
                     </div>
-                    <div class="event-info">
-                        <h3 class="event-title">New Student Orientation 2026</h3>
-                        <p class="event-desc">The journey to excellence begins here! We officially welcomed our newest batch of students at the 2026 Orientation Programme. The day was filled with inspiring words, foundational insights, and a wonderful sense of community as students took their first steps toward becoming future leaders.</p>
-                    </div>
+                    <div class="slide-dots" id="slide-dots"></div>
                 </div>
 
-                <!-- Event 2 -->
-                <div class="gallery-event" data-category="achievements">
-                    <div class="event-photos count-1">
-                        <div class="event-photo">
-                            <img src="photos demo/annualday.jfif" alt="Annual Prize Day">
-                        </div>
-                    </div>
-                    <div class="event-info">
-                        <h3 class="event-title">Annual Prize Day &amp; Honors Ceremony</h3>
-                        <p class="event-desc">Celebrating the best of Pinecrest! Outstanding students were honored for their academic excellence, leadership, and co-curricular achievements. The ceremony was a proud moment for students, parents, and faculty alike — a true celebration of dedication and hard work.</p>
-                    </div>
-                </div>
-
-                <!-- Event 3 -->
-                <div class="gallery-event" data-category="sports">
-                    <div class="event-photos count-3">
-                        <div class="event-photo">
-                            <img src="photos demo/athletic1.jfif" alt="Athletics 1">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/athletic2.jfif" alt="Athletics 2">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/athletic3.jfif" alt="Athletics 3">
-                        </div>
-                    </div>
-                    <div class="event-info">
-                        <h3 class="event-title">Inter-House Athletics Carnival</h3>
-                        <p class="event-desc">Strength, speed, and sportsmanship! Our annual Inter-House Athletics Carnival brought together students from all four houses for a thrilling day of track and field events. The competitive yet joyful spirit on display was a testament to the robust sports culture at Pinecrest Academy.</p>
-                    </div>
-                </div>
-
-                <!-- Event 4 -->
-                <div class="gallery-event" data-category="academics">
-                    <div class="event-photos count-2">
-                        <div class="event-photo">
-                            <img src="photos demo/Science-IA-Days-NB.webp" alt="Science Lab 1">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/science day2.jfif" alt="Science Lab 2">
-                        </div>
-                    </div>
-                    <div class="event-info">
-                        <h3 class="event-title">Science Lab Open Day</h3>
-                        <p class="event-desc">Curiosity meets discovery! Students from all grades participated in hands-on experiments during our annual Science Lab Open Day. From chemical reactions to robotics demonstrations, the event showcased the scientific spirit that thrives within the walls of Pinecrest Academy.</p>
-                    </div>
-                </div>
-
-                <!-- Event 5 -->
-                <div class="gallery-event" data-category="events">
-                    <div class="event-photos count-4">
-                        <div class="event-photo">
-                            <img src="photos demo/culture5.jfif" alt="Cultural Fest 1">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/culture2.jfif" alt="Cultural Fest 2">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/culture3.jfif" alt="Cultural Fest 3">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/culture4.jfif" alt="Cultural Fest 4">
-                        </div>
-                    </div>
-                    <div class="event-info">
-                        <h3 class="event-title">Cultural Fest 2026</h3>
-                        <p class="event-desc">A celebration of creativity and diversity! Our annual Cultural Fest was a spectacular showcase of music, dance, drama, and art. Students expressed their unique talents and cultural heritage in a vibrant display that united the entire school community in joy and appreciation.</p>
-                    </div>
-                </div>
-
-                <!-- Event 6 -->
-                <div class="gallery-event" data-category="achievements">
-                    <div class="event-photos count-2">
-                        <div class="event-photo">
-                            <img src="photos demo/gradu1.jfif" alt="Graduation 1">
-                        </div>
-                        <div class="event-photo">
-                            <img src="photos demo/gradua2.jfif" alt="Graduation 2">
-                        </div>
-                    </div>
-                    <div class="event-info">
-                        <h3 class="event-title">Graduation Day Ceremony</h3>
-                        <p class="event-desc">A proud milestone for every student, parent, and teacher at Pinecrest Academy! Our graduating class of 2026 walked across the stage with beaming smiles, marking the end of one remarkable chapter and the beginning of an exciting new journey into the world.</p>
-                    </div>
-                </div>
+                <!-- Thumbnail rail -->
+                <div class="slide-thumbs" id="slide-thumbs"></div>
 
             </div>
         </section>
     </main>
 
-    <!-- ── Footer── -->
     <footer id="site-footer">
         <div class="container">
             <div class="footer-grid">
@@ -304,7 +220,7 @@
                     <ul class="footer-links">
                         <li><a href="index.html" class="footer-link" id="footer-link-home">Home</a></li>
                         <li><a href="about.html" class="footer-link" id="footer-link-about">About Us</a></li>
-                        <li><a href="curriculum-admissions.html" class="footer-link" id="footer-link-academics">Curriculum & Admissions</a></li>
+                        <li><a href="curriculum-admissions.html" class="footer-link" id="footer-link-academics">Curriculum &amp; Admissions</a></li>
                     </ul>
                 </div>
                 <div>
@@ -331,28 +247,175 @@
         </div>
     </footer>
 
-    <!-- Filter Script -->
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const filterBtns = document.querySelectorAll(".filter-btn");
-            const events = document.querySelectorAll(".gallery-event");
+    // ── Photo data ───────────────────────────────────────────────────────────
+    const PHOTOS = [
+        { src: "photos demo/images.jfif", alt: "Orientation Day 1", category: "events",
+          event: "New Student Orientation 2026",
+          desc: "The journey to excellence begins here! We officially welcomed our newest batch of students at the 2026 Orientation Programme." },
+        { src: "photos demo/DDR-Orientation-Day-2023-8.jpg", alt: "Orientation Day 2", category: "events",
+          event: "New Student Orientation 2026",
+          desc: "Filled with inspiring words, foundational insights, and a wonderful sense of community." },
+        { src: "photos demo/annualday.jfif", alt: "Annual Prize Day", category: "achievements",
+          event: "Annual Prize Day & Honors Ceremony",
+          desc: "Celebrating the best of Pinecrest! Outstanding students were honored for academic excellence and leadership." },
+        { src: "photos demo/athletic1.jfif", alt: "Athletics 1", category: "sports",
+          event: "Inter-House Athletics Carnival",
+          desc: "Strength, speed, and sportsmanship! Students from all four houses came together for a thrilling day of track and field." },
+        { src: "photos demo/athletic2.jfif", alt: "Athletics 2", category: "sports",
+          event: "Inter-House Athletics Carnival",
+          desc: "The competitive yet joyful spirit on display was a testament to Pinecrest's robust sports culture." },
+        { src: "photos demo/athletic3.jfif", alt: "Athletics 3", category: "sports",
+          event: "Inter-House Athletics Carnival",
+          desc: "Every house gave their all — proving that at Pinecrest, sport is as important as scholarship." },
+        { src: "photos demo/Science-IA-Days-NB.webp", alt: "Science Lab 1", category: "academics",
+          event: "Science Lab Open Day",
+          desc: "Curiosity meets discovery! Students participated in hands-on experiments during our annual Open Day." },
+        { src: "photos demo/science day2.jfif", alt: "Science Lab 2", category: "academics",
+          event: "Science Lab Open Day",
+          desc: "From chemical reactions to robotics demonstrations, the event showcased Pinecrest's scientific spirit." },
+        { src: "photos demo/culture5.jfif", alt: "Cultural Fest 1", category: "events",
+          event: "Cultural Fest 2026",
+          desc: "A celebration of creativity and diversity! Our annual Cultural Fest showcased music, dance, drama, and art." },
+        { src: "photos demo/culture2.jfif", alt: "Cultural Fest 2", category: "events",
+          event: "Cultural Fest 2026",
+          desc: "Students expressed their unique talents and cultural heritage in a vibrant, unifying display." },
+        { src: "photos demo/culture3.jfif", alt: "Cultural Fest 3", category: "events",
+          event: "Cultural Fest 2026",
+          desc: "Every performance told a story — of tradition, creativity, and the Pinecrest spirit." },
+        { src: "photos demo/culture4.jfif", alt: "Cultural Fest 4", category: "events",
+          event: "Cultural Fest 2026",
+          desc: "The stage came alive with color and energy as students from every grade took their moment in the spotlight." },
+        { src: "photos demo/gradu1.jfif", alt: "Graduation 1", category: "achievements",
+          event: "Graduation Day Ceremony",
+          desc: "A proud milestone for every student, parent, and teacher! Our graduating class of 2026 walked across the stage with beaming smiles." },
+        { src: "photos demo/gradua2.jfif", alt: "Graduation 2", category: "achievements",
+          event: "Graduation Day Ceremony",
+          desc: "Marking the end of one remarkable chapter and the beginning of an exciting new journey into the world." }
+    ];
 
-            filterBtns.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    filterBtns.forEach(b => b.classList.remove("active"));
-                    btn.classList.add("active");
+    const CATEGORY_LABELS = {
+        events: "Seminars & Events",
+        sports: "Sports",
+        academics: "Academics",
+        achievements: "Honors & Achievements"
+    };
 
-                    const filter = btn.dataset.filter;
-                    events.forEach(event => {
-                        if (filter === "all" || event.dataset.category === filter) {
-                            event.style.display = "";
-                        } else {
-                            event.style.display = "none";
-                        }
-                    });
-                });
-            });
+    // ── State ────────────────────────────────────────────────────────────────
+    let visiblePhotos = [...PHOTOS];
+    let currentIndex  = 0;
+    let autoplayTimer = null;
+
+    // ── DOM refs ─────────────────────────────────────────────────────────────
+    const track    = document.getElementById("slider-track");
+    const dotsWrap = document.getElementById("slide-dots");
+    const thumbs   = document.getElementById("slide-thumbs");
+    const counter  = document.getElementById("slide-counter");
+    const sliderEl = document.getElementById("slider");
+
+    // ── Build slides ─────────────────────────────────────────────────────────
+    function buildSlider() {
+        track.innerHTML = "";
+        dotsWrap.innerHTML = "";
+        thumbs.innerHTML = "";
+
+        visiblePhotos.forEach((photo, i) => {
+            const slide = document.createElement("div");
+            slide.className = "slide";
+            slide.innerHTML = `
+                <img src="${photo.src}" alt="${photo.alt}" loading="${i === 0 ? "eager" : "lazy"}">
+                <div class="slide-caption">
+                    <div class="cap-tag">${CATEGORY_LABELS[photo.category] ?? photo.category}</div>
+                    <div class="cap-title">${photo.event}</div>
+                    <div class="cap-desc">${photo.desc}</div>
+                </div>
+            `;
+            track.appendChild(slide);
+
+            const dot = document.createElement("button");
+            dot.className = "slide-dot";
+            dot.addEventListener("click", () => goTo(i));
+            dotsWrap.appendChild(dot);
+
+            const thumb = document.createElement("div");
+            thumb.className = "slide-thumb";
+            thumb.innerHTML = `<img src="${photo.src}" alt="${photo.alt}" loading="lazy">`;
+            thumb.addEventListener("click", () => goTo(i));
+            thumbs.appendChild(thumb);
         });
+
+        currentIndex = 0;
+        renderPosition();
+    }
+
+    // ── Move to a slide ──────────────────────────────────────────────────────
+    function goTo(index) {
+        currentIndex = (index + visiblePhotos.length) % visiblePhotos.length;
+        renderPosition();
+        resetAutoplay();
+    }
+    function goNext() { goTo(currentIndex + 1); }
+    function goPrev() { goTo(currentIndex - 1); }
+
+    function renderPosition() {
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        counter.textContent = `${currentIndex + 1} / ${visiblePhotos.length}`;
+
+        document.querySelectorAll(".slide-dot").forEach((d, i) => {
+            d.classList.toggle("active", i === currentIndex);
+        });
+        document.querySelectorAll(".slide-thumb").forEach((t, i) => {
+            t.classList.toggle("active", i === currentIndex);
+        });
+        const activeThumb = thumbs.children[currentIndex];
+        if (activeThumb) {
+            activeThumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }
+    }
+
+    // ── Autoplay ─────────────────────────────────────────────────────────────
+    function startAutoplay() {
+        autoplayTimer = setInterval(goNext, 5000);
+    }
+    function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        startAutoplay();
+    }
+    sliderEl.addEventListener("mouseenter", () => clearInterval(autoplayTimer));
+    sliderEl.addEventListener("mouseleave", startAutoplay);
+
+    // ── Arrows ───────────────────────────────────────────────────────────────
+    document.getElementById("slide-next").addEventListener("click", () => { goNext(); resetAutoplay(); });
+    document.getElementById("slide-prev").addEventListener("click", () => { goPrev(); resetAutoplay(); });
+
+    // ── Keyboard ─────────────────────────────────────────────────────────────
+    sliderEl.addEventListener("keydown", e => {
+        if (e.key === "ArrowRight") goNext();
+        if (e.key === "ArrowLeft") goPrev();
+    });
+
+    // ── Touch swipe ──────────────────────────────────────────────────────────
+    let touchStartX = 0;
+    track.addEventListener("touchstart", e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    track.addEventListener("touchend", e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) { diff > 0 ? goNext() : goPrev(); resetAutoplay(); }
+    });
+
+    // ── Filters ──────────────────────────────────────────────────────────────
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            const filter = btn.dataset.filter;
+            visiblePhotos = filter === "all" ? [...PHOTOS] : PHOTOS.filter(p => p.category === filter);
+            buildSlider();
+        });
+    });
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    buildSlider();
+    startAutoplay();
     </script>
 </body>
 </html>
