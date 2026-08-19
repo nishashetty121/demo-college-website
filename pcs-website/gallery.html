@@ -128,10 +128,52 @@
         }
         .slide-dot.active { background: var(--accent); width: 22px; border-radius: 4px; }
 
+        /* ── Detail panel: full write-up that changes with the active photo ── */
+        .slide-details {
+            max-width: 940px;
+            margin: 24px auto 0;
+            padding: 28px 32px;
+            background: rgba(14, 24, 49, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md, 10px);
+        }
+        .slide-details .det-tag {
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.09em; color: var(--accent); margin-bottom: 8px;
+        }
+        .slide-details .det-title {
+            font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 10px;
+        }
+        .slide-details .det-lead {
+            font-size: 0.98rem; font-weight: 700; color: var(--accent);
+            line-height: 1.6; margin-bottom: 14px;
+        }
+        .slide-details .det-stats {
+            display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+        }
+        .slide-details .det-stat {
+            padding: 6px 14px; border: 1px solid var(--border-color); border-radius: 999px;
+            font-size: 0.8rem; color: var(--text-muted);
+        }
+        .slide-details .det-stat strong { color: var(--accent); font-weight: 700; }
+        .slide-details .det-body {
+            font-size: 0.92rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 12px;
+        }
+        .slide-details .det-highlights {
+            margin: 4px 0 16px; padding-left: 20px;
+        }
+        .slide-details .det-highlights li {
+            font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 4px;
+        }
+        .slide-details .det-highlights li strong { color: #fff; font-weight: 600; }
+        .slide-details .det-close {
+            font-size: 0.92rem; font-weight: 700; color: #fff; line-height: 1.6;
+        }
+
         /* Thumbnail rail below main slider */
         .slide-thumbs {
             display: flex; gap: 8px; overflow-x: auto; max-width: 940px;
-            margin: 18px auto 64px; padding-bottom: 4px;
+            margin: 20px auto 64px; padding-bottom: 4px;
             scrollbar-width: thin; scrollbar-color: var(--accent) transparent;
         }
         .slide-thumbs::-webkit-scrollbar { height: 4px; }
@@ -198,6 +240,9 @@
                     </div>
                     <div class="slide-dots" id="slide-dots"></div>
                 </div>
+
+                <!-- Detail panel: changes every time the active photo changes -->
+                <div class="slide-details" id="slide-details"></div>
 
                 <!-- Thumbnail rail -->
                 <div class="slide-thumbs" id="slide-thumbs"></div>
@@ -302,17 +347,131 @@
         achievements: "Honors & Achievements"
     };
 
+    // ── Detailed write-up per event, keyed by event name ────────────────────
+    // Looked up by the CURRENT slide's photo.event, so the panel below the
+    // slider changes every time the active photo changes.
+    const EVENT_DETAILS = {
+        "New Student Orientation 2026": {
+            lead: "Orientation Day marks the true beginning of the Pinecrest journey, where new students step onto campus for the first time as part of the community.",
+            stats: [
+                { value: "2 Days", label: "Programme" },
+                { value: "180+", label: "New Students" },
+                { value: "4", label: "House Allocations" }
+            ],
+            body: [
+                "Day one opens with a welcome assembly led by the Principal, where new students hear about Pinecrest's history, values, and the house system before being formally allocated into one of the four houses — a placement that shapes their sporting, cultural, and mentorship groups for the rest of their time at the school. Senior student mentors, called \"House Guides,\" lead small-group campus tours covering the library, science blocks, sports facilities, and cafeteria.",
+                "The second day shifts focus to academics: department heads run short subject-taster sessions so students get a feel for teaching style before timetables are finalized, and a counselor-led session covers study habits and how to access academic support. Parents attend a separate briefing covering the school calendar, fees, and communication channels."
+            ],
+            highlights: [
+                { title: "House Allocation Ceremony", text: "each new student receives their house colors and is welcomed by senior house captains." },
+                { title: "Campus Trail", text: "a guided walkthrough of every major facility, ending at the auditorium for photos." },
+                { title: "Ice-Breaker Evening", text: "informal games designed to form the first friend groups before classes begin." }
+            ],
+            close: "By the end of the two days, new students leave not just informed about Pinecrest, but already feeling part of it."
+        },
+        "Annual Prize Day & Honors Ceremony": {
+            lead: "Prize Day is Pinecrest's formal recognition of the year's academic toppers, sports champions, and standout contributors to campus life.",
+            stats: [
+                { value: "60+", label: "Awards Presented" },
+                { value: "12", label: "Subject Categories" },
+                { value: "1", label: "Alumni Keynote" }
+            ],
+            body: [
+                "The ceremony opens with subject-wise academic awards — a topper is recognized in each core subject per grade, decided on exam performance combined with sustained classwork quality. This is followed by all-round achievement awards, weighing academics alongside sport, clubs, and community service.",
+                "The final segment is reserved for special recognitions: the Principal's Medal for the graduating student who best embodies the school's values, the Sportsmanship Award voted on by PE staff and house captains, and the Community Service Honor. An invited alumnus delivers the keynote, usually reflecting on how a Pinecrest experience shaped their career."
+            ],
+            highlights: [
+                { title: "Subject Excellence Medals", text: "one topper recognized per subject, per grade." },
+                { title: "Principal's Medal", text: "the ceremony's highest individual honor, awarded to one graduating student." },
+                { title: "Alumni Keynote", text: "a former student returns to speak on their path since Pinecrest." }
+            ],
+            close: "The ceremony exists to make a full year of effort visible in one afternoon — not just the score on a transcript, but the consistency behind it."
+        },
+        "Inter-House Athletics Carnival": {
+            lead: "The Athletics Carnival turns Pinecrest's four houses into competing teams for a full day of track and field events.",
+            stats: [
+                { value: "4", label: "Houses Competing" },
+                { value: "18", label: "Events" },
+                { value: "1", label: "Championship Trophy" }
+            ],
+            body: [
+                "The morning session is devoted to track events — sprints, relays, and hurdles for senior grades, with age-appropriate modified distances for junior students. Field events run in parallel: long jump, shot put, and high jump pits are staffed by PE faculty acting as certified event judges, with results logged live to a scoreboard.",
+                "The afternoon is reserved for house-spirit events that count toward the overall House Championship rather than individual medals — tug-of-war, the sack race, and the always-competitive staff-vs-student exhibition relay. House captains coordinate training in the weeks before the carnival and are responsible for team selection."
+            ],
+            highlights: [
+                { title: "Track Programme", text: "sprints, relays, and hurdles across all grades." },
+                { title: "Field Events", text: "long jump, shot put, and high jump, judged by PE faculty." },
+                { title: "House Championship", text: "cumulative points across the day decide the winning house." }
+            ],
+            close: "More than the medals, the carnival is where students learn what it means to train for something as a team."
+        },
+        "Science Lab Open Day": {
+            lead: "Open Day pulls the curtain back on Pinecrest's Physics, Chemistry, and Biology labs, letting students run experiments rather than just read about them.",
+            stats: [
+                { value: "5", label: "Lab Stations" },
+                { value: "300+", label: "Student Visits" },
+                { value: "1", label: "Robotics Corner" }
+            ],
+            body: [
+                "Each department runs its own station. The Chemistry lab focuses on visible-reaction demonstrations run under close faculty supervision with full safety briefings. The Physics station covers basic circuit assembly and simple mechanics demos. The Biology lab sets up microscope stations with prepared specimens, guided by senior students trained as peer demonstrators.",
+                "A fifth station — the Computer Science and Robotics corner — has become one of the most visited parts of Open Day, where senior students demonstrate simple programmed builds and let younger visitors try basic coding on a supervised laptop bank. Stations are timed to align with what each grade is currently covering in class."
+            ],
+            highlights: [
+                { title: "Chemistry Station", text: "supervised reaction demonstrations with safety briefings." },
+                { title: "Biology Station", text: "microscope work on prepared specimens, peer-led by senior students." },
+                { title: "Robotics Corner", text: "programmed builds and beginner coding, the newest addition." }
+            ],
+            close: "Students remember what they build far longer than what they're told, and Open Day is built entirely around giving them something to build."
+        },
+        "Cultural Fest 2026": {
+            lead: "Cultural Fest is Pinecrest's biggest showcase of student talent, spanning music, dance, drama, and visual art across a multi-day programme.",
+            stats: [
+                { value: "3 Days", label: "Programme" },
+                { value: "25+", label: "Performances" },
+                { value: "1", label: "Art Exhibition" }
+            ],
+            body: [
+                "Day one belongs to dance — a classical segment rooted in regional tradition, followed by a contemporary showcase choreographed entirely by student committees. Day two is the music evening, a battle-of-the-bands format judged by a panel that includes faculty and, most years, a guest musician.",
+                "The final day centers on drama and visual art. The one-act play competition sees each grade stage a short piece, written and directed by students. Running in parallel, the art exhibition in the main hall displays student work across painting, sculpture, and photography, open to the public."
+            ],
+            highlights: [
+                { title: "Battle of the Bands", text: "competitive student music evening judged by a guest panel." },
+                { title: "One-Act Play Competition", text: "grade-level drama, written and directed by students." },
+                { title: "Art Exhibition", text: "painting, sculpture, and photography, open to the public." }
+            ],
+            close: "Cultural Fest gives students who may not shine in the classroom a stage where they clearly do."
+        },
+        "Graduation Day Ceremony": {
+            lead: "Graduation Day formally closes each outgoing batch's time at Pinecrest with a ceremony built around tradition and reflection.",
+            stats: [
+                { value: "120+", label: "Graduating Students" },
+                { value: "3", label: "Valedictory Speeches" },
+                { value: "1", label: "Faculty Address" }
+            ],
+            body: [
+                "The ceremony opens with the graduating class processing onto the main stage in academic gowns, called forward house by house to receive their certificates individually from the Principal, so each student's walk across the stage is its own moment. Photography is arranged immediately after each house group.",
+                "Three students are selected by faculty vote to deliver valedictory speeches. A faculty address follows, typically delivered by the homeroom teacher who followed the batch the longest. The ceremony closes with the traditional cap toss on the auditorium lawn, followed by an informal reception."
+            ],
+            highlights: [
+                { title: "House-wise Certificate Presentation", text: "each student called individually by the Principal." },
+                { title: "Valedictory Speeches", text: "three student speakers selected by faculty vote." },
+                { title: "Cap Toss & Reception", text: "the ceremony's informal close on the auditorium lawn." }
+            ],
+            close: "It's less an ending than a handover — the moment students formally become part of Pinecrest's alumni community."
+        }
+    };
+
     // ── State ────────────────────────────────────────────────────────────────
     let visiblePhotos = [...PHOTOS];
     let currentIndex  = 0;
-    let autoplayTimer = null;
 
     // ── DOM refs ─────────────────────────────────────────────────────────────
-    const track    = document.getElementById("slider-track");
-    const dotsWrap = document.getElementById("slide-dots");
-    const thumbs   = document.getElementById("slide-thumbs");
-    const counter  = document.getElementById("slide-counter");
-    const sliderEl = document.getElementById("slider");
+    const track         = document.getElementById("slider-track");
+    const dotsWrap       = document.getElementById("slide-dots");
+    const thumbs         = document.getElementById("slide-thumbs");
+    const counter        = document.getElementById("slide-counter");
+    const sliderEl        = document.getElementById("slider");
+    const detailsPanel   = document.getElementById("slide-details");
 
     // ── Build slides ─────────────────────────────────────────────────────────
     function buildSlider() {
@@ -353,10 +512,40 @@
     function goTo(index) {
         currentIndex = (index + visiblePhotos.length) % visiblePhotos.length;
         renderPosition();
-        resetAutoplay();
     }
     function goNext() { goTo(currentIndex + 1); }
     function goPrev() { goTo(currentIndex - 1); }
+
+    // ── Render the full detail card for the current photo's event ──────────
+    function renderDetailsPanel(photo) {
+        const details = EVENT_DETAILS[photo.event];
+        if (!details) {
+            detailsPanel.innerHTML = "";
+            return;
+        }
+
+        const statsHtml = details.stats
+            .map(s => `<span class="det-stat"><strong>${s.value}</strong> ${s.label}</span>`)
+            .join("");
+
+        const bodyHtml = details.body
+            .map(p => `<p class="det-body">${p}</p>`)
+            .join("");
+
+        const highlightsHtml = details.highlights
+            .map(h => `<li><strong>${h.title}</strong> — ${h.text}</li>`)
+            .join("");
+
+        detailsPanel.innerHTML = `
+            <div class="det-tag">${CATEGORY_LABELS[photo.category] ?? photo.category}</div>
+            <div class="det-title">${photo.event}</div>
+            <p class="det-lead">${details.lead}</p>
+            <div class="det-stats">${statsHtml}</div>
+            ${bodyHtml}
+            <ul class="det-highlights">${highlightsHtml}</ul>
+            <p class="det-close">${details.close}</p>
+        `;
+    }
 
     function renderPosition() {
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -372,22 +561,15 @@
         if (activeThumb) {
             activeThumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
         }
-    }
 
-    // ── Autoplay ─────────────────────────────────────────────────────────────
-    function startAutoplay() {
-        autoplayTimer = setInterval(goNext, 5000);
+        // Full detail card updates every time the active photo changes
+        const photo = visiblePhotos[currentIndex];
+        if (photo) renderDetailsPanel(photo);
     }
-    function resetAutoplay() {
-        clearInterval(autoplayTimer);
-        startAutoplay();
-    }
-    sliderEl.addEventListener("mouseenter", () => clearInterval(autoplayTimer));
-    sliderEl.addEventListener("mouseleave", startAutoplay);
 
     // ── Arrows ───────────────────────────────────────────────────────────────
-    document.getElementById("slide-next").addEventListener("click", () => { goNext(); resetAutoplay(); });
-    document.getElementById("slide-prev").addEventListener("click", () => { goPrev(); resetAutoplay(); });
+    document.getElementById("slide-next").addEventListener("click", goNext);
+    document.getElementById("slide-prev").addEventListener("click", goPrev);
 
     // ── Keyboard ─────────────────────────────────────────────────────────────
     sliderEl.addEventListener("keydown", e => {
@@ -400,7 +582,7 @@
     track.addEventListener("touchstart", e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
     track.addEventListener("touchend", e => {
         const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) { diff > 0 ? goNext() : goPrev(); resetAutoplay(); }
+        if (Math.abs(diff) > 50) { diff > 0 ? goNext() : goPrev(); }
     });
 
     // ── Filters ──────────────────────────────────────────────────────────────
@@ -416,7 +598,6 @@
 
     // ── Init ─────────────────────────────────────────────────────────────────
     buildSlider();
-    startAutoplay();
     </script>
 </body>
 </html>
